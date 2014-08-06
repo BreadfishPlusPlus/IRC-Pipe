@@ -1,0 +1,6 @@
+{
+    "port": 1337,
+    "admin": ["maddin"],
+    "authkey": "test123",
+    "mongodb": "mongodb://"
+}

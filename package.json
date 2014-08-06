@@ -1,0 +1,25 @@
+{
+  "name": "Chatserver",
+  "version": "1.0.0",
+  "main": "lib/chat.js",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/BreadfishPlusPlus/Chatserver.git"
+  },
+  "author": "Martin Rump <admin@maddin.cc>",
+  "license": "GPL v2",
+  "bugs": {
+    "url": "https://github.com/BreadfishPlusPlus/Chatserver/issues"
+  },
+  "scripts": {
+    "start": "forever start -o stdout.log -e stderr.log -a --uid \"bppchat\" index.js --prod"
+  },
+  "homepage": "https://github.com/BreadfishPlusPlus/Chatserver",
+  "dependencies": {
+    "socket.io": "^1.0.6",
+    "debug": "^1.0.4",
+    "moment": "^2.8.1",
+    "mongoose": "^3.8.14"
+  }
+}
