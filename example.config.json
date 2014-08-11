@@ -1,6 +1,17 @@
 {
-    "port": 1337,
-    "admin": ["maddin"],
-    "authkey": "test123",
-    "mongodb": "mongodb://"
+    "irc": {
+        "host": "de.trine.io",
+        "port": 6697,
+        "nick": "BPP",
+        "user": "BPP",
+        "real": "https://github.com/BreadfishPlusPlus/IRC-Pipe/wiki",
+        "pass": "",
+        "chan": "#breadchat",
+        "ignorechar": "!"
+    },
+    "linked": {},
+    "socket": {
+        "port": 1337,
+        "serveClient": false
+    }
 }
