@@ -16,7 +16,7 @@ Das Team von SA-MP.de distanziert sich von dem Chat.
 
 Der Chat wird von freiwilligen Helfern Moderiert, die bei bedarf den Chatlog löschen und Benutzer Sperren können.
 
-Als Breadfish++ Benutzer sieht man nur die Nachrichten, die geschrieben wurden während man da war. Es gibt keine Chatlogs für B++ Benutzer, und sobald man die Seite aktualisiert ist alles wieder weg.
+Als Breadfish++ Benutzer sieht man nur die Nachrichten, die geschrieben wurden während man da war. Es gibt keine Chatlogs für Breadfish++ Benutzer, und sobald man die Seite aktualisiert ist alles wieder weg.
 
 Von daher macht es auch nicht wirklich sinn da Werbung für irgendwas zu machen oder groß zu Spammen :squirrel: 
 
