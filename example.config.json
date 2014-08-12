@@ -9,6 +9,7 @@
         "chan": "#breadchat",
         "ignorechar": "!"
     },
+    "banned": [],
     "linked": {},
     "socket": {
         "port": 1337,
