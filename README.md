@@ -14,9 +14,11 @@ Hinweise zum Chat
 
 Das Team von SA-MP.de distanziert sich von dem Chat.
 
-Der Chat wird von freiwilligen Helfern Moderiert, die bei bedarf den Chatlog löschen können. Man sollte sich aber im klaren darüber sein, das man als B++ Benutzer nur das sieht, was geschrieben wurde während man da war. Es gibt keine Chatlogs für B++ Benutzer, und sobald man die Seite aktualisiert ist alles wieder weg.
+Der Chat wird von freiwilligen Helfern Moderiert, die bei bedarf den Chatlog löschen und Benutzer Sperren können.
 
-Von daher macht es auch nicht wirklich sinn da Werbung für irgendwas zu machen oder groß zu Spammn :squirrel: 
+Als Breadfish++ Benutzer sieht man nur die Nachrichten, die geschrieben wurden während man da war. Es gibt keine Chatlogs für B++ Benutzer, und sobald man die Seite aktualisiert ist alles wieder weg.
+
+Von daher macht es auch nicht wirklich sinn da Werbung für irgendwas zu machen oder groß zu Spammen :squirrel: 
 
 Wer öfters negativ auffällt kann auch ganz vom Chat ausgeschlossen werden, also versucht einfach euch anständig zu benehmen :v: 
 
@@ -56,7 +58,7 @@ Zur verfügung stehen folgende Befehle:
 
 * `!clearchat`
     
-    Löscht den kompletten verlauf des Chats für alle Benutzer die Zur Zeit im Chat sind. DIe Benutzer im IRC sind davon natürlich nicht betroffen.
+    Löscht den kompletten verlauf des Chats für alle Benutzer die Zur Zeit im Chat sind. Die Benutzer im IRC sind davon natürlich nicht betroffen.
 
 * `!ban <Benutzername>`
 
