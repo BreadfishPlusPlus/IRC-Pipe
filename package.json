@@ -19,7 +19,6 @@
   "dependencies": {
     "debug": "^1.0.4",
     "coffea": "^0.3.1",
-    "irc": "^0.3.7",
     "moment": "^2.8.1",
     "underscore": "^1.6.0",
     "request": "^2.40.0",
