@@ -10,7 +10,6 @@ var debug       = {
     redis: require('debug')('redis')
 };
 var config      = require(__dirname + '/config');
-var socket      = require('socket.io');
 var coffea      = require('coffea');
 var tls         = require('tls');   
 var _           = require('underscore');
@@ -46,12 +45,6 @@ redis.on('end', function () {
 
 
 moment.locale('de');
-
-
-socket.configure(function () { 
-    socket.set('transports', ['xhr-polling']); 
-    socket.set('polling duration', 10); 
-});
 
 /*
  * 
@@ -178,11 +171,15 @@ var getLink = function (nick, userId, callback) {
 /*
  * 
  */
+var requestHandler = function (req, res) {
+    res.writeHead(200);
+    res.end(process.env.PORT);
+};
 
 var startSocketServer = function (channel) {
-    io = socket.listen(process.env.PORT, {
-        serveClient: false
-    });
+    var app = require('http').createServer(requestHandler);
+    var io = require('socket.io').listen(app);
+    app.listen(process.env.PORT);
     debug.io('Socket listening at port %s', process.env.PORT);
 
     io.on('connection', function (socket) {
