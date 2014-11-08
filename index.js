@@ -1,5 +1,9 @@
 process.env.DEBUG = 'socket,irc,redis';
 
+if (!process.env.PORT) {
+    process.env.PORT = 8080;
+}
+
 var debug       = {
     irc: require('debug')('irc'),
     io: require('debug')('socket'),
@@ -169,10 +173,10 @@ var getLink = function (nick, userId, callback) {
  */
 
 var startSocketServer = function (channel) {
-    io = socket.listen(config.socketPort, {
+    io = socket.listen(process.env.PORT, {
         serveClient: false
     });
-    debug.io('Socket listening at port %s', config.socketPort);
+    debug.io('Socket listening at port %s', process.env.PORT);
 
     io.on('connection', function (socket) {
         var connectionId = getHashed(socket.handshake.address);
