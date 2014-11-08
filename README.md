@@ -62,7 +62,7 @@ Zur verfügung stehen folgende Befehle:
 
 * `!ban <Benutzername>`
 
-    Sperrt den Benutzer aus dem Chat aus. Er Kann weiterhin mitverfolgen was geschrieben wird, ist aber nicht mehr in der Lage nachrichten zu verfassen.
+    Sperrt den Benutzer aus dem Chat aus. Er Kann weiterhin mitverfolgen was geschrieben wird, ist aber nicht mehr in der Lage Nachrichten zu verfassen.
 
 * `!unban <Benutzername>`
 

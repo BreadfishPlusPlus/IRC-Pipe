@@ -1,0 +1,14 @@
+{
+    "irc": {
+        "host": "de.trine.io",
+        "port": 6697,
+        "nick": "BRPP",
+        "channel": "#maddin"
+    },
+    "socketPort": 1337,
+    "redis": {
+        "host": "grouper.redistogo.com",
+        "port": 9987,
+        "auth": "f87160ae4f342777cb53dcadbde5d413"
+    }
+}
