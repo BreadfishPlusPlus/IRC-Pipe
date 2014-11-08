@@ -44,7 +44,14 @@ redis.on('end', function () {
     debug.redis('Connection ended');
 });
 
+
 moment.locale('de');
+
+
+socket.configure(function () { 
+    socket.set('transports', ['xhr-polling']); 
+    socket.set('polling duration', 10); 
+});
 
 /*
  * 
