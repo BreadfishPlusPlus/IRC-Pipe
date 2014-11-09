@@ -4,12 +4,31 @@ if (!process.env.PORT) {
     process.env.PORT = 8080;
 }
 
+if (!process.env.IRC_CHANNEL) {
+    throw new Error('IRC_CHANNEL Umgebungsvariable ist nicht definiert!');
+}
+if (!process.env.IRC_HOST) {
+    throw new Error('IRC_HOST Umgebungsvariable ist nicht definiert!');
+}
+if (!process.env.IRC_PORT) {
+    throw new Error('IRC_PORT Umgebungsvariable ist nicht definiert!');
+}
+if (!process.env.IRC_NICK) {
+    throw new Error('IRC_NICK Umgebungsvariable ist nicht definiert!');
+}
+
+if (!process.env.REDIS_HOST) {
+    throw new Error('REDIS_HOST Umgebungsvariable ist nicht definiert!');
+}
+if (!process.env.REDIS_PORT) {
+    throw new Error('REDIS_PORT Umgebungsvariable ist nicht definiert!');
+}
+
 var debug       = {
     irc: require('debug')('irc'),
     io: require('debug')('socket'),
     redis: require('debug')('redis')
 };
-var config      = require(__dirname + '/config');
 var socket      = require('socket.io');
 var coffea      = require('coffea');
 var tls         = require('tls');   
@@ -29,8 +48,10 @@ var ircOnline   = [];
  * 
  */
 
-redis = require('redis').createClient(config.redis.port, config.redis.host, {});
-redis.auth(config.redis.auth);
+redis = require('redis').createClient(process.env.REDIS_PORT, process.env.REDIS_HOST);
+if (process.env.REDIS_AUTH) {
+    redis.auth(process.env.REDIS_AUTH);
+}
 redis.on('ready', function () {
     debug.redis('Connection ready');
 });
@@ -50,7 +71,7 @@ moment.locale('de');
  * 
  */
 
-var stream = tls.connect(config.irc.port, config.irc.host, {
+var stream = tls.connect(process.env.IRC_PORT, process.env.IRC_HOST, {
     rejectUnauthorized: false
 }, function () {
     if (stream.authorized ||
@@ -65,12 +86,14 @@ var stream = tls.connect(config.irc.port, config.irc.host, {
     }
 });
 var irc = coffea(stream);
-irc.pass(config.irc.pass);
-irc.nick(config.irc.nick);
-irc.user(config.irc.nick, 'https://github.com/BreadfishPlusPlus/IRC-Pipe/wiki');
+if (process.env.IRC_NICK) {
+    irc.pass(process.env.IRC_PASS);
+}
+irc.nick(process.env.IRC_NICK);
+irc.user(process.env.IRC_NICK, 'https://github.com/BreadfishPlusPlus/IRC-Pipe/wiki');
 
 irc.on('motd', function () {
-    irc.join(config.irc.channel);
+    irc.join(process.env.IRC_CHANNEL);
 });
 irc.on('data', function (data) {
     debug.irc(data.string);
@@ -340,7 +363,7 @@ irc.on('message', function (event) {
 });
 
 irc.on('join', function (event) {
-    if (event.channel.getName() === config.irc.channel) {
+    if (event.channel.getName() === process.env.IRC_CHANNEL) {
         if (event.user.getNick() === irc.me.getNick()) {
             startSocketServer(event.channel);
         }
@@ -351,13 +374,13 @@ irc.on('part', function (event) {
     irc.write('NAMES ' + event.channel.getName());
 });
 irc.on('quit', function () {
-    irc.write('NAMES ' + config.irc.chan);
+    irc.write('NAMES ' + process.env.IRC_CHANNEL);
 });
 irc.on('kick', function (event) {
     irc.write('NAMES ' + event.channel.getName());
 });
 irc.on('names', function (event) {
-    if (event.channel.getName() === config.irc.channel) {
+    if (event.channel.getName() === process.env.IRC_CHANNEL) {
         ircOnline = [];
 
         async.filter(Object.keys(event.names), isLinked, function (results) {
