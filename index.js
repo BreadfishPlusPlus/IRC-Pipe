@@ -200,13 +200,11 @@ var startSocketServer = function (channel) {
         res.writeHead(200);
         res.end('Ok');
     });
-    var io = require('socket.io')(app);
-    app.listen(process.env.PORT || 80);
-
-    /*io = socket.listen(process.env.PORT, {
-        serveClient: false
-    });*/
-    debug.io('Socket listening at port %s', process.env.PORT);
+    io = socket(app);
+    app.listen(process.env.PORT || 80, function () {
+        debug.io('Socket listening at port %s', process.env.PORT);
+    });
+    
 
     io.on('connection', function (socket) {
         var connectionId = getHashed(socket.handshake.address);
