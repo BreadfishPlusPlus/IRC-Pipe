@@ -196,6 +196,13 @@ var getLink = function (nick, userId, callback) {
  */
 
 var startSocketServer = function (channel) {
+    var app = require('http').createServer(function (req, res) {
+        res.writeHead(200);
+        res.end('Ok');
+    });
+    var io = require('socket.io')(app);
+    app.listen(80);
+
     io = socket.listen(process.env.PORT, {
         serveClient: false
     });
