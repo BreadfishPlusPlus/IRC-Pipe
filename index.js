@@ -201,11 +201,11 @@ var startSocketServer = function (channel) {
         res.end('Ok');
     });
     var io = require('socket.io')(app);
-    app.listen(80);
+    app.listen(process.env.PORT || 80);
 
-    io = socket.listen(process.env.PORT, {
+    /*io = socket.listen(process.env.PORT, {
         serveClient: false
-    });
+    });*/
     debug.io('Socket listening at port %s', process.env.PORT);
 
     io.on('connection', function (socket) {
