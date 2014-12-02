@@ -127,8 +127,8 @@ var isLinked = function (name, callback) {
     });
 };
 
-var setLink = function (name, avatar, userId) {
-    redis.hmset('linked:' + name, {
+var setLink = function (nick, name, avatar, userId) {
+    redis.hmset('linked:' + nick, {
         'name': name,
         'avatar': avatar,
         'userId': userId
@@ -191,8 +191,8 @@ var getLink = function (nick, userId, callback) {
                     name = $('.userName span').text(),
                     avatarUrl = 'http://forum.sa-mp.de/' + $('.userAvatar a img').attr('src');
                 callback('Du wurdest erfolgreich verlinkt. Benutzer ID: ' + userId + ', Benutzername: ' + name + ', Avatar: ' + avatarUrl);
-                //setLink
-                setLink(name, avatarUrl, userId);
+
+                setLink(nick, name, avatarUrl, userId);
                 addIrcUser(nick);
             } else {
                 callback('Konnte Profil nicht aufrufen (' + res.statusCode + ')');
