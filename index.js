@@ -43,6 +43,7 @@ var irc         = null;
 var io          = null;
 var redis       = null;
 var ircUser     = [];
+var topic       = '';
 
 /*
  * 
@@ -224,6 +225,7 @@ var startSocketServer = function (channel) {
             debug.io('Connection %s is %s', connectionId, userinfo.name);
             channel.say('\u000307' + userinfo.name + '\u000309 (\u000310' + connectionId + '\u000309) hat den Chat betreten.');
             socket.userinfo = userinfo;
+            socket.emit('topic', topic);
             getOnline(function (msg) {
                 socket.emit('smessage', {
                     type: 'system',
@@ -410,5 +412,11 @@ irc.on('names', function (event) {
         _.each(_.keys(event.names), function (nick) {
             irc.whois(nick);
         });
+    }
+});
+irc.on('topic', function (event) {
+    if (event.channel.getName() === process.env.IRC_CHANNEL) {
+        io.emit('topic', event.topic);
+        topic = event.topic;
     }
 });
