@@ -42,13 +42,13 @@ var util        = require('util');
 var irc         = null;
 var io          = null;
 var redis       = null;
-var ircOnline   = [];
+var ircUser     = [];
 
 /*
  * 
  */
 
-redis = require('redis').createClient(process.env.REDIS_PORT, process.env.REDIS_HOST);
+redis = require('redis').createClient(parseInt(process.env.REDIS_PORT, 10), process.env.REDIS_HOST);
 if (process.env.REDIS_AUTH) {
     redis.auth(process.env.REDIS_AUTH);
 }
@@ -73,7 +73,7 @@ moment.locale('de');
 
 
 var stream = net.connect({
-    port: process.env.IRC_PORT,
+    port: parseInt(process.env.IRC_PORT, 10),
     host: process.env.IRC_HOST
 });
 var irc = coffea(stream);
@@ -134,6 +134,18 @@ var setLink = function (name, avatar, userId) {
     });
 };
 
+var addIrcUser = function (nick) {
+    isLinked(nick, function (linked) {
+        if (linked) {
+            ircUser.push(nick);
+            ircUser = _.uniq(ircUser);
+        }
+    });
+};
+var remIrcUser = function (nick) {
+    ircUser = _.without(ircUser, nick);
+};
+
 var getOnline = function (callback) {
     var chat;
     chat = _.map(_.filter(io.sockets.connected, function (socket) {
@@ -143,11 +155,18 @@ var getOnline = function (callback) {
     });
     chat = _.uniq(chat);
 
-    async.map(ircOnline, function (nick, cb) {
+    async.map(ircUser, function (nick, cb) {
         isLinked(nick, function (linked) {
-            cb(null, '<a href="http://forum.sa-mp.de/index.php?page=User&userID=' + linked.userId + '">' + linked.name + '</a>');
+            if (linked) {
+                cb(null, '<a href="http://forum.sa-mp.de/index.php?page=User&userID=' + linked.userId + '">' + linked.name + '</a>');
+            } else {
+                cb(null, null);
+            }
         });
     }, function (err, ircuser) {
+        ircuser = _.filter(ircuser, function (user) {
+            return !_.isNull(user);
+        });
         callback(util.format('Zur Zeit %s %s Benutzer im Chat%s und %s Benutzer im IRC%s.',
             chat.length === 1 ? 'ist' : 'sind',
             chat.length === 1 ? 'ein': chat.length,
@@ -173,6 +192,7 @@ var getLink = function (nick, userId, callback) {
                 callback('Du wurdest erfolgreich verlinkt. Benutzer ID: ' + userId + ', Benutzername: ' + name + ', Avatar: ' + avatarUrl);
                 //setLink
                 setLink(name, avatarUrl, userId);
+                addIrcUser(nick);
             } else {
                 callback('Konnte Profil nicht aufrufen (' + res.statusCode + ')');
             }
@@ -192,10 +212,9 @@ var startSocketServer = function (channel) {
         res.end('Ok');
     });
     io = socket(app);
-    app.listen(process.env.PORT || 80, function () {
+    app.listen(parseInt(process.env.PORT || 80, 10), function () {
         debug.io('Socket listening at port %s', process.env.PORT);
     });
-    
 
     io.on('connection', function (socket) {
         var connectionId = getHashed(socket.handshake.address);
@@ -367,20 +386,29 @@ irc.on('join', function (event) {
     }
 });
 irc.on('part', function (event) {
-    irc.write('NAMES ' + event.channel.getName());
+    _.each(event.channels, function (channel) {
+        if (channel.getName() === process.env.IRC_CHANNEL) {
+            remIrcUser(event.user.getNick());
+        }
+    });
 });
-irc.on('quit', function () {
-    irc.write('NAMES ' + process.env.IRC_CHANNEL);
+irc.on('quit', function (event) {
+    remIrcUser(event.user.getNick());
 });
 irc.on('kick', function (event) {
-    irc.write('NAMES ' + event.channel.getName());
+    remIrcUser(event.user.getNick());
+});
+irc.on('whois', function (event) {
+    if (event.user.away === null && _.has(event.user.channels, process.env.IRC_CHANNEL)) {
+        addIrcUser(event.user.nick);
+    } else {
+        remIrcUser(event.user.nick);
+    }
 });
 irc.on('names', function (event) {
     if (event.channel.getName() === process.env.IRC_CHANNEL) {
-        ircOnline = [];
-
-        async.filter(Object.keys(event.names), isLinked, function (results) {
-            ircOnline = results;
+        _.each(_.keys(event.names), function (nick) {
+            irc.whois(nick);
         });
     }
 });
