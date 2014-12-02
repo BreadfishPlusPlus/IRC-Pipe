@@ -31,7 +31,7 @@ var debug       = {
 };
 var socket      = require('socket.io');
 var coffea      = require('coffea');
-var tls         = require('tls');   
+var net         = require('net');
 var _           = require('underscore');
 var moment      = require('moment');
 var request     = require('request');
@@ -71,19 +71,10 @@ moment.locale('de');
  * 
  */
 
-var stream = tls.connect(process.env.IRC_PORT, process.env.IRC_HOST, {
-    rejectUnauthorized: false
-}, function () {
-    if (stream.authorized ||
-        stream.authorizationError === 'DEPTH_ZERO_SELF_SIGNED_CERT' ||
-        stream.authorizationError === 'CERT_HAS_EXPIRED' ||
-        stream.authorizationError === 'UNABLE_TO_VERIFY_LEAF_SIGNATURE') {
-        if (stream.authorizationError === 'CERT_HAS_EXPIRED') {
-            debug.irc('Connecting to server with expired certificate');
-        }
-    } else {
-        debug.irc('[SSL-Error]' + stream.authorizationError);
-    }
+
+var stream = net.connect({
+    port: process.env.IRC_PORT,
+    host: process.env.IRC_HOST
 });
 var irc = coffea(stream);
 if (process.env.IRC_NICK) {
